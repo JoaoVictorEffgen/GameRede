@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/showdosaber/static/css/main.e4b9e0dd.css",
-    "main.js": "/showdosaber/static/js/main.b0261c9c.js",
-    "static/js/453.5598b49e.chunk.js": "/showdosaber/static/js/453.5598b49e.chunk.js",
-    "index.html": "/showdosaber/index.html",
-    "main.e4b9e0dd.css.map": "/showdosaber/static/css/main.e4b9e0dd.css.map",
-    "main.b0261c9c.js.map": "/showdosaber/static/js/main.b0261c9c.js.map",
-    "453.5598b49e.chunk.js.map": "/showdosaber/static/js/453.5598b49e.chunk.js.map"
+    "main.css": "/GameRede/static/css/main.e4b9e0dd.css",
+    "main.js": "/GameRede/static/js/main.b7d348e7.js",
+    "static/js/453.5598b49e.chunk.js": "/GameRede/static/js/453.5598b49e.chunk.js",
+    "index.html": "/GameRede/index.html",
+    "main.e4b9e0dd.css.map": "/GameRede/static/css/main.e4b9e0dd.css.map",
+    "main.b7d348e7.js.map": "/GameRede/static/js/main.b7d348e7.js.map",
+    "453.5598b49e.chunk.js.map": "/GameRede/static/js/453.5598b49e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e4b9e0dd.css",
-    "static/js/main.b0261c9c.js"
+    "static/js/main.b7d348e7.js"
   ]
 }
