@@ -307,9 +307,17 @@ const Timer = ({ timeLeft }) => (
 // Componente: Ecrã Inicial
 const InitialScreen = ({ onStartQuiz, onViewRanking }) => {
   const [participantName, setParticipantName] = useState('');
+  const [participantCPF, setParticipantCPF] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
   const [selectedQuiz, setSelectedQuiz] = useState(null);
+
+  const handleCPFChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); // Remove tudo que não for número
+    if (value.length <= 11) { // Limita a 11 dígitos
+      setParticipantCPF(value);
+    }
+  };
 
   const handleStart = () => {
     if (!selectedQuiz) {
@@ -317,82 +325,90 @@ const InitialScreen = ({ onStartQuiz, onViewRanking }) => {
       setShowModal(true);
       return;
     }
-    if (participantName.trim()) {
-      onStartQuiz(participantName.trim(), selectedQuiz);
-    } else {
-      setModalMessage('Por favor, insira o seu nome para começar.');
+
+    if (!participantCPF) {
+      setModalMessage('Por favor, digite seu CPF.');
       setShowModal(true);
+      return;
     }
+
+    // Verificar se o usuário já jogou este quiz
+    const existingRanking = JSON.parse(localStorage.getItem('quizRanking') || '[]');
+    const hasPlayed = existingRanking.some(
+      entry => entry.cpf === participantCPF && entry.quiz === selectedQuiz
+    );
+
+    if (hasPlayed) {
+      setModalMessage('Você já completou este quiz. Por favor, escolha outro quiz.');
+      setShowModal(true);
+      return;
+    }
+
+    onStartQuiz(participantName, selectedQuiz, participantCPF);
   };
-  
-  const screenBackgroundStyle = "flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4";
 
   return (
-    <div className={screenBackgroundStyle}>
-      <img src="https://placehold.co/150x80/003366/FFFFFF?text=REDE&font=Inter" alt="Logo Rede Montagens Industriais" className="mb-6 h-20 rounded-lg" />
-      <h1 className="text-4xl font-bold mb-2 text-center text-blue-400">Show do Saber SSMA</h1>
-      <p className="text-xl mb-8 text-gray-300">Conectados pela REDE</p>
-      
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-white p-4">
       <div className="w-full max-w-md bg-gray-700 p-8 rounded-xl shadow-2xl">
         <input
           type="text"
           placeholder="Digite o seu nome"
           value={participantName}
           onChange={(e) => setParticipantName(e.target.value)}
-          className="w-full p-3 mb-6 border border-gray-600 rounded-lg bg-gray-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-          aria-label="Nome do participante"
+          className="w-full p-3 mb-4 border border-gray-600 rounded-lg bg-gray-800 text-white"
+        />
+        <input
+          type="text"
+          placeholder="Digite seu CPF (apenas números)"
+          value={participantCPF}
+          onChange={handleCPFChange}
+          maxLength={11}
+          className="w-full p-3 mb-6 border border-gray-600 rounded-lg bg-gray-800 text-white"
         />
         
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-4 text-center">Escolha seu Quiz</h2>
           <div className="space-y-3">
-            <button
-              onClick={() => setSelectedQuiz('ambiente')}
-              className={`w-full p-3 rounded-lg text-left transition duration-150 ease-in-out ${
-                selectedQuiz === 'ambiente' 
-                  ? 'bg-green-600 text-white' 
-                  : 'bg-gray-800 text-white hover:bg-gray-600'
-              }`}
-            >
-              Quiz Meio Ambiente
-            </button>
-            <button
-              onClick={() => setSelectedQuiz('seguranca')}
-              className={`w-full p-3 rounded-lg text-left transition duration-150 ease-in-out ${
-                selectedQuiz === 'seguranca' 
-                  ? 'bg-green-600 text-white' 
-                  : 'bg-gray-800 text-white hover:bg-gray-600'
-              }`}
-            >
-              Quiz da Segurança
-            </button>
-            <button
-              onClick={() => setSelectedQuiz('saude')}
-              className={`w-full p-3 rounded-lg text-left transition duration-150 ease-in-out ${
-                selectedQuiz === 'saude' 
-                  ? 'bg-green-600 text-white' 
-                  : 'bg-gray-800 text-white hover:bg-gray-600'
-              }`}
-            >
-              Quiz da Saúde
-            </button>
+            {Object.keys(quizData).map((quizKey) => {
+              const existingRanking = JSON.parse(localStorage.getItem('quizRanking') || '[]');
+              const hasPlayed = existingRanking.some(
+                entry => entry.cpf === participantCPF && entry.quiz === quizKey
+              );
+              
+              return (
+                <button
+                  key={quizKey}
+                  onClick={() => setSelectedQuiz(quizKey)}
+                  disabled={hasPlayed}
+                  className={`w-full p-3 rounded-lg text-left ${
+                    selectedQuiz === quizKey 
+                      ? 'bg-green-600 text-white' 
+                      : hasPlayed
+                      ? 'bg-gray-500 text-gray-400 cursor-not-allowed'
+                      : 'bg-gray-800 text-white'
+                  }`}
+                >
+                  {quizKey === 'ambiente' ? 'Quiz Meio Ambiente' :
+                   quizKey === 'seguranca' ? 'Quiz da Segurança' :
+                   'Quiz da Saúde'}
+                  {hasPlayed && ' (Já completado)'}
+                </button>
+              );
+            })}
           </div>
         </div>
 
         <button
           onClick={handleStart}
-          disabled={!participantName.trim() || !selectedQuiz}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-          aria-label="Iniciar Quiz"
+          className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-lg"
         >
           Iniciar Quiz
         </button>
         <button
           onClick={onViewRanking}
-          className="w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-150 ease-in-out"
-          aria-label="Ver Ranking"
+          className="w-full mt-4 bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-lg"
         >
-          Ver Ranking (Top 3)
+          Ver Ranking
         </button>
       </div>
       
@@ -414,19 +430,20 @@ const QuizScreen = ({ participantName, selectedQuiz, onQuizEnd }) => {
   const [answered, setAnswered] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [totalTime, setTotalTime] = useState(0);
 
   const currentQuestion = quizData[selectedQuiz][currentQuestionIndex];
 
-  const handleNextQuestion = useCallback(() => {
+  const handleNextQuestion = () => {
     if (currentQuestionIndex < quizData[selectedQuiz].length - 1) {
-      setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
       setTimeLeft(TIMER_DURATION);
       setSelectedOption(null);
       setAnswered(false);
     } else {
-      onQuizEnd(score);
+      onQuizEnd(score, totalTime);
     }
-  }, [currentQuestionIndex, score, onQuizEnd, selectedQuiz]);
+  };
 
   useEffect(() => {
     if (answered) {
@@ -439,7 +456,10 @@ const QuizScreen = ({ participantName, selectedQuiz, onQuizEnd }) => {
       return;
     }
     const timerId = setInterval(() => {
-      setTimeLeft((prevTime) => prevTime - 1);
+      setTimeLeft((prevTime) => {
+        setTotalTime(prev => prev + 1);
+        return prevTime - 1;
+      });
     }, 1000);
 
     return () => clearInterval(timerId);
@@ -461,18 +481,22 @@ const QuizScreen = ({ participantName, selectedQuiz, onQuizEnd }) => {
     setShowModal(true);
   };
 
-  const screenBackgroundStyle = "flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4";
-
   if (!currentQuestion) {
-    return <div className={screenBackgroundStyle}><p className="text-white text-center py-10">A carregar pergunta...</p></div>;
+    return <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4">
+      <p className="text-white text-center py-10">A carregar pergunta...</p>
+    </div>;
   }
 
   return (
-    <div className={screenBackgroundStyle}>
-      <div className="w-full max-w-2xl bg-gray-700 p-6 md:p-8 rounded-xl shadow-2xl relative">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white p-4">
+      <div className="w-full max-w-2xl bg-gray-700 p-6 md:p-8 rounded-xl shadow-2xl">
         <div className="flex justify-between items-center mb-6">
           <span className="text-lg font-semibold text-blue-300">Pergunta {currentQuestionIndex + 1} de {quizData[selectedQuiz].length}</span>
-          <Timer timeLeft={timeLeft} />
+          <div className="flex items-center">
+            <div className="w-8 h-8 rounded-full border-2 border-red-400 flex items-center justify-center">
+              {timeLeft}
+            </div>
+          </div>
         </div>
 
         <div className="text-center mb-2">
@@ -485,43 +509,30 @@ const QuizScreen = ({ participantName, selectedQuiz, onQuizEnd }) => {
         <h2 className="text-xl md:text-2xl font-semibold mb-6 text-center text-gray-100">{currentQuestion.questionText}</h2>
 
         <div className="space-y-3">
-          {currentQuestion.options.map((option, index) => {
-            let buttonClass = "w-full text-left p-3 md:p-4 rounded-lg transition duration-150 ease-in-out text-sm md:text-base ";
-            
-            if (answered) {
-              if (index === currentQuestion.correctOptionIndex) {
-                buttonClass += "bg-green-500 hover:bg-green-600 text-white font-semibold";
-              } else if (index === selectedOption) {
-                buttonClass += "bg-red-500 hover:bg-red-600 text-white font-semibold";
-              } else {
-                buttonClass += "bg-gray-600 text-gray-300 cursor-not-allowed";
-              }
-            } else {
-              buttonClass += "bg-blue-600 hover:bg-blue-700 text-white";
-            }
-
-            if (selectedOption === index && !answered) {
-              buttonClass += " ring-2 ring-yellow-400";
-            }
-
-            return (
-              <button
-                key={index}
-                onClick={() => handleAnswer(index)}
-                disabled={answered}
-                className={buttonClass}
-                aria-label={`Opção ${index + 1}: ${option.text}`}
-              >
-                {option.text}
-              </button>
-            );
-          })}
+          {currentQuestion.options.map((option, index) => (
+            <button
+              key={index}
+              onClick={() => handleAnswer(index)}
+              disabled={answered}
+              className={`w-full text-left p-3 md:p-4 rounded-lg text-sm md:text-base ${
+                answered
+                  ? index === currentQuestion.correctOptionIndex
+                    ? 'bg-green-500 text-white'
+                    : index === selectedOption
+                    ? 'bg-red-500 text-white'
+                    : 'bg-gray-600 text-gray-300'
+                  : 'bg-blue-600 text-white'
+              }`}
+            >
+              {option.text}
+            </button>
+          ))}
         </div>
 
         {answered && (
           <button
             onClick={handleNextQuestion}
-            className="w-full mt-6 bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg text-lg"
+            className="w-full mt-6 bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-lg"
           >
             {currentQuestionIndex < quizData[selectedQuiz].length - 1 ? 'Próxima Pergunta' : 'Ver Resultado'}
           </button>
@@ -543,46 +554,53 @@ const QuizScreen = ({ participantName, selectedQuiz, onQuizEnd }) => {
 };
 
 // Componente: Ecrã de Resultados
-const ResultsScreen = ({ participantName, score, selectedQuiz, onPlayAgain, onViewRanking }) => {
-  const saveResult = () => {
-    fetch('https://quiz-api.SEUNOME.workers.dev/ranking', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name: participantName,
-        score,
-        date: new Date().toISOString()
-      })
+const ResultsScreen = ({ participantName, score, selectedQuiz, onPlayAgain, onViewRanking, participantCPF, totalTime }) => {
+  useEffect(() => {
+    const existingRanking = JSON.parse(localStorage.getItem('quizRanking') || '[]');
+    existingRanking.push({
+      name: participantName,
+      cpf: participantCPF,
+      quiz: selectedQuiz,
+      score,
+      time: totalTime,
+      date: new Date().toISOString()
     });
-  };
-
-  const screenBackgroundStyle = "flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4";
+    existingRanking.sort((a, b) => {
+      if (b.score !== a.score) {
+        return b.score - a.score;
+      }
+      return a.time - b.time;
+    });
+    localStorage.setItem('quizRanking', JSON.stringify(existingRanking));
+  }, []);
 
   return (
-    <div className={screenBackgroundStyle}>
-      <img src="https://placehold.co/150x80/003366/FFFFFF?text=REDE&font=Inter" alt="Logo Rede Montagens Industriais" className="mb-6 h-20 rounded-lg" />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-green-900 to-gray-900 text-white p-4">
       <div className="w-full max-w-md bg-gray-700 p-8 rounded-xl shadow-2xl text-center">
         <h2 className="text-3xl font-bold mb-4 text-blue-400">Resultado Final</h2>
         <p className="text-xl mb-2 text-gray-200">Parabéns, <span className="font-semibold text-yellow-400">{participantName}!</span></p>
-        <p className="text-2xl mb-6 text-gray-100">
+        <p className="text-2xl mb-2 text-gray-100">
           Você acertou <span className="font-bold text-green-400">{score}</span> de <span className="font-bold text-green-400">{quizData[selectedQuiz].length}</span> perguntas!
+        </p>
+        <p className="text-xl mb-6 text-gray-200">
+          Tempo total: <span className="font-bold text-yellow-400">{totalTime}</span> segundos
         </p>
         <div className="space-y-4">
           <button
             onClick={onPlayAgain}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-150 ease-in-out"
+            className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-lg"
           >
             Jogar Novamente
           </button>
           <button
             onClick={onViewRanking}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-150 ease-in-out"
+            className="w-full bg-green-600 text-white font-bold py-3 px-4 rounded-lg text-lg"
           >
-            Ver Ranking (Top 3)
+            Ver Ranking
           </button>
           <button
             onClick={() => window.location.reload()}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-150 ease-in-out"
+            className="w-full bg-purple-600 text-white font-bold py-3 px-4 rounded-lg text-lg"
           >
             Voltar ao Início
           </button>
@@ -597,28 +615,76 @@ const RankingScreen = ({ onBackToHome }) => {
   const [ranking, setRanking] = useState([]);
 
   useEffect(() => {
-    fetch('https://quiz-api.SEUNOME.workers.dev/ranking')
-      .then(res => res.json())
-      .then(data => setRanking(data));
+    const storedRanking = JSON.parse(localStorage.getItem('quizRanking') || '[]');
+    
+    // Agrupar resultados por CPF
+    const groupedResults = storedRanking.reduce((acc, entry) => {
+      if (!acc[entry.cpf]) {
+        acc[entry.cpf] = {
+          name: entry.name,
+          cpf: entry.cpf,
+          totalScore: 0,
+          totalTime: 0,
+          quizzes: {},
+          lastDate: entry.date
+        };
+      }
+      
+      // Somar pontuação e tempo
+      acc[entry.cpf].totalScore += entry.score;
+      acc[entry.cpf].totalTime += entry.time;
+      
+      // Guardar resultado individual do quiz
+      acc[entry.cpf].quizzes[entry.quiz] = {
+        score: entry.score,
+        time: entry.time
+      };
+      
+      // Atualizar data mais recente
+      if (new Date(entry.date) > new Date(acc[entry.cpf].lastDate)) {
+        acc[entry.cpf].lastDate = entry.date;
+      }
+      
+      return acc;
+    }, {});
+    
+    // Converter para array e ordenar
+    const unifiedRanking = Object.values(groupedResults)
+      .sort((a, b) => {
+        if (b.totalScore !== a.totalScore) {
+          return b.totalScore - a.totalScore;
+        }
+        return a.totalTime - b.totalTime;
+      });
+    
+    setRanking(unifiedRanking);
   }, []);
 
-  const screenBackgroundStyle = "flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white p-4";
-
   return (
-    <div className={screenBackgroundStyle}>
-        <img src="https://placehold.co/150x80/003366/FFFFFF?text=REDE&font=Inter" alt="Logo Rede Montagens Industriais" className="mb-6 h-20 rounded-lg" />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-yellow-900 to-gray-900 text-white p-4">
       <div className="w-full max-w-md bg-gray-700 p-8 rounded-xl shadow-2xl">
-        <h2 className="text-3xl font-bold mb-6 text-center text-blue-400">Top 3 - Ranking</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center text-blue-400">Ranking Completo</h2>
         {ranking.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto">
             {ranking.map((entry, index) => (
               <div key={index} className="bg-gray-600 p-4 rounded-lg">
                 <div className="flex justify-between items-center">
-                  <span className="font-bold">{entry.name}</span>
-                  <span className="text-blue-400">{entry.score} pontos</span>
+                  <div className="flex items-center">
+                    <span className="text-yellow-400 font-bold mr-2">#{index + 1}</span>
+                    <span className="font-bold">{entry.name}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-blue-400 block">{entry.totalScore} pontos totais</span>
+                    <span className="text-green-400 text-sm">{entry.totalTime} segundos totais</span>
+                  </div>
                 </div>
-                <div className="text-sm text-gray-300">
-                  {new Date(entry.date).toLocaleDateString()}
+                <div className="mt-2 text-sm text-gray-300">
+                  <div>Quiz Meio Ambiente: {entry.quizzes.ambiente?.score || 0} pontos</div>
+                  <div>Quiz Segurança: {entry.quizzes.seguranca?.score || 0} pontos</div>
+                  <div>Quiz Saúde: {entry.quizzes.saude?.score || 0} pontos</div>
+                </div>
+                <div className="text-xs text-gray-400 mt-1">
+                  Última atualização: {new Date(entry.lastDate).toLocaleDateString()}
                 </div>
               </div>
             ))}
@@ -628,7 +694,7 @@ const RankingScreen = ({ onBackToHome }) => {
         )}
         <button
           onClick={onBackToHome}
-          className="w-full mt-8 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg text-lg transition duration-150 ease-in-out"
+          className="w-full mt-8 bg-blue-600 text-white font-bold py-3 px-4 rounded-lg text-lg"
         >
           Voltar ao Ecrã Inicial
         </button>
@@ -642,17 +708,21 @@ const RankingScreen = ({ onBackToHome }) => {
 function App() {
   const [currentScreen, setCurrentScreen] = useState('initial'); // 'initial', 'quiz', 'results', 'ranking'
   const [participantName, setParticipantName] = useState('');
+  const [participantCPF, setParticipantCPF] = useState('');
   const [score, setScore] = useState(0);
+  const [totalTime, setTotalTime] = useState(0);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
 
-  const handleStartQuiz = (name, quiz) => {
+  const handleStartQuiz = (name, quiz, cpf) => {
     setParticipantName(name);
+    setParticipantCPF(cpf);
     setSelectedQuiz(quiz);
     setCurrentScreen('quiz');
   };
 
-  const handleQuizEnd = (finalScore) => {
+  const handleQuizEnd = (finalScore, finalTime) => {
     setScore(finalScore);
+    setTotalTime(finalTime);
     setCurrentScreen('results');
   };
 
@@ -676,12 +746,14 @@ function App() {
   }
   if (currentScreen === 'results') {
     return <ResultsScreen 
-              participantName={participantName} 
-              score={score} 
-              selectedQuiz={selectedQuiz}
-              onPlayAgain={handlePlayAgain} 
-              onViewRanking={handleViewRanking}
-            />;
+      participantName={participantName} 
+      score={score} 
+      selectedQuiz={selectedQuiz}
+      onPlayAgain={handlePlayAgain} 
+      onViewRanking={handleViewRanking}
+      participantCPF={participantCPF}
+      totalTime={totalTime}
+    />;
   }
   if (currentScreen === 'ranking') {
     return <RankingScreen onBackToHome={handleBackToHome} />;
