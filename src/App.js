@@ -426,7 +426,7 @@ const InitialScreen = ({ onStartQuiz, onViewRanking }) => {
     <div 
       className="flex flex-col items-center justify-center min-h-screen text-white p-4"
       style={{
-        backgroundImage: 'url(/menu.png)',
+        backgroundImage: `url(${process.env.PUBLIC_URL}/menu.png)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -573,13 +573,13 @@ const QuizScreen = ({ participantName, selectedQuiz, onQuizEnd }) => {
   const getBackgroundImage = () => {
     switch (selectedQuiz) {
       case 'saude':
-        return 'url(/images/saude.png)';
+        return `url(${process.env.PUBLIC_URL}/images/saude.png)`;
       case 'ambiente':
-        return 'url(/images/meio_ambiente.png)';
+        return `url(${process.env.PUBLIC_URL}/images/meio_ambiente.png)`;
       case 'seguranca':
-        return 'url(/images/seguranca.png)';
+        return `url(${process.env.PUBLIC_URL}/images/seguranca.png)`;
       default:
-        return 'url(/images/quiz.png)';
+        return `url(${process.env.PUBLIC_URL}/images/quiz.png)`;
     }
   };
 
@@ -680,7 +680,7 @@ const ResultsScreen = ({ participantName, score, selectedQuiz, onPlayAgain, onVi
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white p-4"
       style={{
-        backgroundImage: 'url(/results.png)',
+        backgroundImage: `url(${process.env.PUBLIC_URL}/results.png)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -773,7 +773,7 @@ const RankingScreen = ({ onBackToHome }) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white p-4"
       style={{
-        backgroundImage: 'url(/ranking.png)',
+        backgroundImage: `url(${process.env.PUBLIC_URL}/ranking.png)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
