@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/GameRede/static/css/main.e4b9e0dd.css",
-    "main.js": "/GameRede/static/js/main.b7d348e7.js",
+    "main.js": "/GameRede/static/js/main.f5cf382a.js",
     "static/js/453.5598b49e.chunk.js": "/GameRede/static/js/453.5598b49e.chunk.js",
     "index.html": "/GameRede/index.html",
     "main.e4b9e0dd.css.map": "/GameRede/static/css/main.e4b9e0dd.css.map",
-    "main.b7d348e7.js.map": "/GameRede/static/js/main.b7d348e7.js.map",
+    "main.f5cf382a.js.map": "/GameRede/static/js/main.f5cf382a.js.map",
     "453.5598b49e.chunk.js.map": "/GameRede/static/js/453.5598b49e.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e4b9e0dd.css",
-    "static/js/main.b7d348e7.js"
+    "static/js/main.f5cf382a.js"
   ]
 }
