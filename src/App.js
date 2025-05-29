@@ -120,6 +120,117 @@ const quizData = {
   ],
   seguranca: [
     {
+      id: 11,
+      questionText: "Qual os documentos necessários/obrigatórios para realização de atividade a quente?",
+      options: [
+        { text: "ART, Checklist, autorização de trabalho a quente, abertura de PTS" },
+        { text: "Checklist, Carteirinha de operação de ponte rolante" },
+        { text: "Cartão de bloqueio, passaporte" }
+      ],
+      correctOptionIndex: 0,
+      decorativeIcon: "📄" // Ícone de documento
+    },
+    {
+      id: 12,
+      questionText: "Quais os EPI's necessários para realização de atividade a quente?",
+      options: [
+        { text: "Blusão de raspa, avental de raspa, perneira de raspa, luva de raspa cano longo, óculos de lente clara, máscara de solda com visor escuro, botina manobreiro, protetor auditivo." },
+        { text: "Avental de PVC, protetor solar, luva nitrílica, óculos, protetor facial incolor" },
+        { text: "Macacão Tyvek, perneira, luva de vaqueta, protetor facial incolor." }
+      ],
+      correctOptionIndex: 0,
+      decorativeIcon: "🧤" // Ícone de luvas
+    },
+    {
+      id: 13,
+      questionText: "Qual documento podemos identificar as medidas de controle para uma atividade?",
+      options: [
+        { text: "PEL (Plano de emergência local)" },
+        { text: "ART (Análise de risco da tarefa)" },
+        { text: "Anexo 3 (Autorização de trabalho a quente)" }
+      ],
+      correctOptionIndex: 1,
+      decorativeIcon: "📋" // Ícone de prancheta
+    },
+    {
+      id: 14,
+      questionText: "Qual item abaixo ajuda a prevenir incêndios em trabalhos a quente?",
+      options: [
+        { text: "Cortina de ar" },
+        { text: "Tapete antiderrapante" },
+        { text: "Manta antichamas" }
+      ],
+      correctOptionIndex: 2,
+      decorativeIcon: "🛡️" // Ícone de escudo
+    },
+    {
+      id: 15,
+      questionText: "Quais das atividades são exemplos de trabalho a quente?",
+      options: [
+        { text: "Soldagem, corte com maçarico e esmerilhamento" },
+        { text: "Pintura, limpeza e manutenção elétrica" },
+        { text: "Limpeza de escritório com aspirador de pó" }
+      ],
+      correctOptionIndex: 0,
+      decorativeIcon: "🔥" // Ícone de fogo
+    },
+    {
+      id: 16,
+      questionText: "Quais riscos estão associados ao trabalho a quente?",
+      options: [
+        { text: "Queda de altura, ruído e iluminação insuficiente" },
+        { text: "Choque térmico e frio extremo" },
+        { text: "Incêndios, explosões e queimaduras" }
+      ],
+      correctOptionIndex: 2,
+      decorativeIcon: "⚠️" // Ícone de aviso
+    },
+    {
+      id: 17,
+      questionText: "Qual é a função do extintor próximo ao local do trabalho a quente?",
+      options: [
+        { text: "Atuar rapidamente em caso de princípio de incêndio" },
+        { text: "Decorar o ambiente" },
+        { text: "Ser usado somente em treinamentos" }
+      ],
+      correctOptionIndex: 0,
+      decorativeIcon: "🚨" // Ícone de sirene
+    },
+    {
+      id: 18,
+      questionText: "O que é uma área classificada?",
+      options: [
+        { text: "São locais destinados especificamente para o trabalho a quente" },
+        { text: "Área na qual uma atmosfera explosiva está presente" },
+        { text: "São aquelas que possuem menor potencial de risco de incêndio" }
+      ],
+      correctOptionIndex: 1,
+      decorativeIcon: "☢️" // Ícone de risco radiativo (usado para áreas perigosas)
+    },
+    {
+      id: 19,
+      questionText: "Não é proibida a instalação de adaptadores entre o cilindro e o regulador de pressão!",
+      options: [
+        { text: "Verdadeiro" },
+        { text: "Falso" }
+      ],
+      correctOptionIndex: 1,
+      decorativeIcon: "🚫" // Ícone de proibido
+    },
+    {
+      id: 20,
+      questionText: "Os cilindros de gás devem ser mantidos em que posição?",
+      options: [
+        { text: "Instalados de forma a se tornar parte de circuito elétrico, mesmo que acidentalmente" },
+        { text: "Mantidos em posição vertical, fixados e distantes de chamas, fontes de centelhamento, calor ou de produtos" },
+        { text: "Quando inoperantes e/ou vazios, mantidos com as válvulas abertas e guardados com o protetor de válvulas (capacete rosqueado" }
+      ],
+      correctOptionIndex: 1,
+      decorativeIcon: "📦" // Ícone de caixa (representando armazenamento)
+    }
+  ],
+  saude: [
+    {
       id: 1,
       questionText: "O QUE É JUNHO VERMELHO?",
       options: [
@@ -229,41 +340,6 @@ const quizData = {
       correctOptionIndex: 0,
       decorativeIcon: "🏥"
     }
-  ],
-  saude: [
-    {
-      id: 1,
-      questionText: "QUAL É A POSTURA CORRETA PARA LEVANTAR PESO DO CHÃO?",
-      options: [
-        { text: "Dobrar as costas e manter as pernas esticadas" },
-        { text: "Dobrar os joelhos, manter as costas retas e usar a força das pernas" },
-        { text: "Levantar rapidamente para não forçar a coluna" }
-      ],
-      correctOptionIndex: 1,
-      decorativeIcon: "💪"
-    },
-    {
-      id: 2,
-      questionText: "QUAIS SÃO OS BENEFÍCIOS DA GINÁSTICA LABORAL?",
-      options: [
-        { text: "Aumentar a fadiga e o estresse" },
-        { text: "Prevenir lesões, melhorar a postura e reduzir o estresse" },
-        { text: "Diminuir a produtividade no trabalho" }
-      ],
-      correctOptionIndex: 1,
-      decorativeIcon: "🧘"
-    },
-    {
-      id: 3,
-      questionText: "QUAL É A IMPORTÂNCIA DAS PAUSAS DURANTE O TRABALHO?",
-      options: [
-        { text: "Apenas para descansar" },
-        { text: "Prevenir fadiga, melhorar a concentração e reduzir riscos de acidentes" },
-        { text: "Diminuir a produtividade" }
-      ],
-      correctOptionIndex: 1,
-      decorativeIcon: "⏰"
-    }
   ]
 };
 
@@ -313,8 +389,8 @@ const InitialScreen = ({ onStartQuiz, onViewRanking }) => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
 
   const handleCPFChange = (e) => {
-    const value = e.target.value.replace(/\D/g, ''); // Remove tudo que não for número
-    if (value.length <= 11) { // Limita a 11 dígitos
+    const value = e.target.value.replace(/\D/g, '');
+    if (value.length <= 11) {
       setParticipantCPF(value);
     }
   };
@@ -332,7 +408,6 @@ const InitialScreen = ({ onStartQuiz, onViewRanking }) => {
       return;
     }
 
-    // Verificar se o usuário já jogou este quiz
     const existingRanking = JSON.parse(localStorage.getItem('quizRanking') || '[]');
     const hasPlayed = existingRanking.some(
       entry => entry.cpf === participantCPF && entry.quiz === selectedQuiz
@@ -348,8 +423,16 @@ const InitialScreen = ({ onStartQuiz, onViewRanking }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-white p-4">
-      <div className="w-full max-w-md bg-gray-700 p-8 rounded-xl shadow-2xl">
+    <div 
+      className="flex flex-col items-center justify-center min-h-screen text-white p-4"
+      style={{
+        backgroundImage: 'url(/menu.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="w-full max-w-md bg-gray-700 bg-opacity-90 p-8 rounded-xl shadow-2xl">
         <input
           type="text"
           placeholder="Digite o seu nome"
@@ -487,9 +570,29 @@ const QuizScreen = ({ participantName, selectedQuiz, onQuizEnd }) => {
     </div>;
   }
 
+  const getBackgroundImage = () => {
+    switch (selectedQuiz) {
+      case 'saude':
+        return 'url(/images/saude.png)';
+      case 'ambiente':
+        return 'url(/images/meio_ambiente.png)';
+      case 'seguranca':
+        return 'url(/images/seguranca.png)';
+      default:
+        return 'url(/images/quiz.png)';
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white p-4">
-      <div className="w-full max-w-2xl bg-gray-700 p-6 md:p-8 rounded-xl shadow-2xl">
+    <div className="flex flex-col items-center justify-center min-h-screen text-white p-4"
+      style={{
+        backgroundImage: getBackgroundImage(),
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      <div className="w-full max-w-2xl bg-gray-700 bg-opacity-90 p-6 md:p-8 rounded-xl shadow-2xl">
         <div className="flex justify-between items-center mb-6">
           <span className="text-lg font-semibold text-blue-300">Pergunta {currentQuestionIndex + 1} de {quizData[selectedQuiz].length}</span>
           <div className="flex items-center">
@@ -575,7 +678,14 @@ const ResultsScreen = ({ participantName, score, selectedQuiz, onPlayAgain, onVi
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-green-900 to-gray-900 text-white p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen text-white p-4"
+      style={{
+        backgroundImage: 'url(/results.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div className="w-full max-w-md bg-gray-700 p-8 rounded-xl shadow-2xl text-center">
         <h2 className="text-3xl font-bold mb-4 text-blue-400">Resultado Final</h2>
         <p className="text-xl mb-2 text-gray-200">Parabéns, <span className="font-semibold text-yellow-400">{participantName}!</span></p>
@@ -661,7 +771,14 @@ const RankingScreen = ({ onBackToHome }) => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-yellow-900 to-gray-900 text-white p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen text-white p-4"
+      style={{
+        backgroundImage: 'url(/ranking.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       <div className="w-full max-w-md bg-gray-700 p-8 rounded-xl shadow-2xl">
         <h2 className="text-3xl font-bold mb-6 text-center text-blue-400">Ranking Completo</h2>
         {ranking.length > 0 ? (
